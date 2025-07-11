@@ -202,31 +202,15 @@ class CalculationGame {
     let num1 = this.getRandomNumber(min1, max1);
     let num2 = this.getRandomNumber(min2, max2);
 
-    // For division, ensure first number is bigger than second
+    // For division, handle zero divisor but keep numbers in range
     if (operation === '/') {
-      if (num2 === 0) num2 = 1;
-      
-      // Swap if num2 is bigger than num1
-      if (num2 > num1) {
-        [num1, num2] = [num2, num1];
+      // If num2 is 0, regenerate it within range (but not 0)
+      while (num2 === 0) {
+        num2 = this.getRandomNumber(Math.max(1, min2), max2);
       }
       
-      // For cleaner division problems, sometimes use factors
-      if (Math.random() < 0.3) {
-        num2 = this.getRandomNumber(1, Math.min(10, num1));
-        const quotient = this.getRandomNumber(1, 20);
-        const newNum1 = num2 * quotient;
-        if (newNum1 >= Math.min(min1, min2) && newNum1 <= Math.max(max1, max2)) {
-          this.currentQuestion = { num1: newNum1, num2, operation };
-          this.correctAnswer = quotient;
-        } else {
-          this.currentQuestion = { num1, num2, operation };
-          this.correctAnswer = this.roundToDecimal(num1 / num2, 2);
-        }
-      } else {
-        this.currentQuestion = { num1, num2, operation };
-        this.correctAnswer = this.roundToDecimal(num1 / num2, 2);
-      }
+      this.currentQuestion = { num1, num2, operation };
+      this.correctAnswer = this.roundToDecimal(num1 / num2, 2);
     } else {
       this.currentQuestion = { num1, num2, operation };
       this.correctAnswer = this.calculateAnswer(num1, num2, operation);
@@ -398,6 +382,20 @@ class CalculationGame {
   }
 }
 
+// Initialize the game when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  new CalculationGame();
+});
+    this.resultsSection.style.display = 'none';
+    this.currentQuestion = null;
+    this.timerDisplay.textContent = '0.0s';
+    
+    // Reset game state
+    this.currentQuestionNumber = 0;
+    this.correctAnswers = 0;
+    this.wrongAnswers = 0;
+    this.allTimes = [];
+  
 // Initialize the game when the page loads
 document.addEventListener('DOMContentLoaded', () => {
   new CalculationGame();
