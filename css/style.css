@@ -372,6 +372,94 @@ header h1 {
   border: 1px solid #f5c6cb;
 }
 
+.question-history {
+  margin: 30px 0;
+  text-align: left;
+}
+
+.question-history h3 {
+  color: #667eea;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.history-list {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.history-item {
+  padding: 15px;
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-item:hover {
+  background: #e9ecef;
+}
+
+.history-item.correct {
+  border-left: 4px solid #28a745;
+}
+
+.history-item.wrong {
+  border-left: 4px solid #dc3545;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.question-num {
+  font-weight: bold;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.status {
+  font-size: 1.2rem;
+}
+
+.time {
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.question-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.answer-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+}
+
+.user-answer {
+  color: #495057;
+}
+
+.correct-answer {
+  color: #dc3545;
+  font-weight: 600;
+}
+
 @media (max-width: 480px) {
   .container {
     padding: 10px;
@@ -392,19 +480,15 @@ header h1 {
   .answer-section button {
     width: 100%;
   }
-}
-
-.visually-hidden {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-  /* 1 */
+  
+  .history-header {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  .answer-details {
+    font-size: 0.85rem;
+  }
 }
 
 /*
@@ -530,28 +614,6 @@ header h1 {
   h2,
   h3 {
     page-break-after: avoid;
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 10px;
-  }
-  
-  header h1 {
-    font-size: 2rem;
-  }
-  
-  .question-display h2 {
-    font-size: 2rem;
-  }
-  
-  .answer-section {
-    flex-direction: column;
-  }
-  
-  .answer-section button {
-    width: 100%;
   }
 }
 

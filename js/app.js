@@ -12,6 +12,7 @@ class CalculationGame {
     this.correctAnswers = 0;
     this.wrongAnswers = 0;
     this.allTimes = [];
+    this.questionHistory = []; // Add this new property
     
     this.motivationalQuotes = [
       "Numbers are the music of reason!",
@@ -68,6 +69,7 @@ class CalculationGame {
     this.averageTime = document.getElementById('averageTime');
     this.performanceMessage = document.getElementById('performanceMessage');
     this.restartBtn = document.getElementById('restartBtn');
+    this.questionHistoryDiv = document.getElementById('questionHistory'); // Add this line
   }
 
   bindEvents() {
@@ -98,6 +100,7 @@ class CalculationGame {
     this.correctAnswers = 0;
     this.wrongAnswers = 0;
     this.allTimes = [];
+    this.questionHistory = []; // Reset question history
     
     // Update UI
     this.totalQuestionsSpan.textContent = this.totalQuestions;
@@ -290,6 +293,16 @@ class CalculationGame {
     this.allTimes.push(timeTaken);
     const isCorrect = this.checkAnswer(userAnswer);
     
+    // Add to question history
+    this.questionHistory.push({
+      questionNumber: this.currentQuestionNumber + 1,
+      question: `${this.currentQuestion.num1} ${this.getOperatorSymbol(this.currentQuestion.operation)} ${this.currentQuestion.num2}`,
+      userAnswer: userAnswer,
+      correctAnswer: this.correctAnswer,
+      isCorrect: isCorrect,
+      timeTaken: timeTaken
+    });
+    
     if (isCorrect) {
       this.correctAnswers++;
     } else {
@@ -302,6 +315,15 @@ class CalculationGame {
     this.submitBtn.style.display = 'none';
     this.nextBtn.style.display = 'inline-block';
     this.answerInput.disabled = true;
+  }
+
+  getOperatorSymbol(operation) {
+    switch (operation) {
+      case '*': return '×';
+      case '/': return '÷';
+      case '-': return '−';
+      default: return operation;
+    }
   }
 
   checkAnswer(userAnswer) {
@@ -361,6 +383,36 @@ class CalculationGame {
     }
     
     this.performanceMessage.textContent = message;
+    
+    // Display question history
+    this.displayQuestionHistory();
+  }
+
+  displayQuestionHistory() {
+    let historyHTML = '<h3>Question Summary</h3><div class="history-list">';
+    
+    this.questionHistory.forEach((item) => {
+      const statusIcon = item.isCorrect ? '✅' : '❌';
+      const statusClass = item.isCorrect ? 'correct' : 'wrong';
+      
+      historyHTML += `
+        <div class="history-item ${statusClass}">
+          <div class="history-header">
+            <span class="question-num">Q${item.questionNumber}</span>
+            <span class="status">${statusIcon}</span>
+            <span class="time">${item.timeTaken.toFixed(1)}s</span>
+          </div>
+          <div class="question-text">${item.question} = ?</div>
+          <div class="answer-details">
+            <span class="user-answer">Your answer: ${item.userAnswer}</span>
+            ${!item.isCorrect ? `<span class="correct-answer">Correct: ${item.correctAnswer}</span>` : ''}
+          </div>
+        </div>
+      `;
+    });
+    
+    historyHTML += '</div>';
+    this.questionHistoryDiv.innerHTML = historyHTML;
   }
 
   backToSettings() {
@@ -379,23 +431,10 @@ class CalculationGame {
     this.correctAnswers = 0;
     this.wrongAnswers = 0;
     this.allTimes = [];
+    this.questionHistory = []; // Reset question history
   }
 }
 
-// Initialize the game when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-  new CalculationGame();
-});
-    this.resultsSection.style.display = 'none';
-    this.currentQuestion = null;
-    this.timerDisplay.textContent = '0.0s';
-    
-    // Reset game state
-    this.currentQuestionNumber = 0;
-    this.correctAnswers = 0;
-    this.wrongAnswers = 0;
-    this.allTimes = [];
-  
 // Initialize the game when the page loads
 document.addEventListener('DOMContentLoaded', () => {
   new CalculationGame();
