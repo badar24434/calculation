@@ -122,6 +122,17 @@ header h1 {
   text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
+.visitor-stats {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  margin-top: 10px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.visitor-stats span {
+  font-weight: 600;
+}
+
 .settings, .game {
   background: white;
   border-radius: 15px;
