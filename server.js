@@ -80,16 +80,20 @@ app.use((req, res, next) => {
     const stats = readStats();
     const sessionId = req.headers['x-session-id'] || generateSessionId();
     
-    // If new session, increment total visits
-    if (!stats.activeUsers[sessionId]) {
+    // Check if this is a completely new session (never seen before)
+    const isNewVisitor = !stats.activeUsers[sessionId];
+    
+    // Only increment total visits for genuinely new visitors
+    if (isNewVisitor) {
       stats.totalVisits++;
     }
     
-    // Update active user
+    // Always update/add active user (this tracks current viewers)
     stats.activeUsers[sessionId] = {
       lastSeen: Date.now(),
       userAgent: req.get('User-Agent') || 'Unknown',
-      ip: req.ip || req.connection.remoteAddress || 'Unknown'
+      ip: req.ip || req.connection.remoteAddress || 'Unknown',
+      isNew: isNewVisitor
     };
     
     writeStats(stats);
@@ -120,6 +124,8 @@ app.post('/api/heartbeat', (req, res) => {
     const stats = readStats();
     if (stats.activeUsers[sessionId]) {
       stats.activeUsers[sessionId].lastSeen = Date.now();
+      // Don't mark as new anymore after first heartbeat
+      stats.activeUsers[sessionId].isNew = false;
       writeStats(stats);
     }
   }

@@ -16,8 +16,8 @@ class VisitorTracker {
     // Start heartbeat to keep user as active
     this.startHeartbeat();
 
-    // Update stats every 30 seconds
-    setInterval(() => this.updateStats(), 30000);
+    // Update stats every 15 seconds for more responsive live count
+    setInterval(() => this.updateStats(), 15000);
 
     // Send heartbeat when user becomes active
     document.addEventListener('visibilitychange', () => {
@@ -25,6 +25,32 @@ class VisitorTracker {
         this.sendHeartbeat();
       }
     });
+
+    // Send heartbeat when user interacts with page
+    ['click', 'keypress', 'mousemove', 'scroll'].forEach(event => {
+      document.addEventListener(event, this.throttle(() => {
+        this.sendHeartbeat();
+      }, 30000)); // Throttle to once per 30 seconds
+    });
+  }
+
+  throttle(func, delay) {
+    let timeoutId;
+    let lastExecTime = 0;
+    return function (...args) {
+      const currentTime = Date.now();
+      
+      if (currentTime - lastExecTime > delay) {
+        func.apply(this, args);
+        lastExecTime = currentTime;
+      } else {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          func.apply(this, args);
+          lastExecTime = Date.now();
+        }, delay - (currentTime - lastExecTime));
+      }
+    };
   }
 
   generateSessionId() {
@@ -63,10 +89,10 @@ class VisitorTracker {
   }
 
   startHeartbeat() {
-    // Send heartbeat every 2 minutes
+    // Send heartbeat every 1 minute to maintain active status
     this.heartbeatInterval = setInterval(() => {
       this.sendHeartbeat();
-    }, 120000);
+    }, 60000);
 
     // Send initial heartbeat
     this.sendHeartbeat();
