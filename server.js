@@ -192,8 +192,6 @@ app.listen(PORT, () => {
   console.log('Visitor tracking enabled');
 });
   res.sendFile(path.join(__dirname, 'index.html'));
-});
-
 // Serve comments page
 app.get('/comments', (req, res) => {
   res.sendFile(path.join(__dirname, 'comments.html'));
@@ -213,7 +211,6 @@ app.listen(PORT, () => {
   writeComments(commentsData);
   
   res.json({ success: true, comment: newComment });
-});
 
 // Serve static files from the root directory
 app.use(express.static('.'));
