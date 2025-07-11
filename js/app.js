@@ -264,6 +264,9 @@ class CalculationGame {
   }
 
   startTimer() {
+    // Clear any existing timer first
+    this.stopTimer();
+    
     this.startTime = Date.now();
     this.timerInterval = setInterval(() => {
       const elapsed = (Date.now() - this.startTime) / 1000;
@@ -276,7 +279,11 @@ class CalculationGame {
       clearInterval(this.timerInterval);
       this.timerInterval = null;
     }
-    return (Date.now() - this.startTime) / 1000;
+    
+    if (this.startTime) {
+      return (Date.now() - this.startTime) / 1000;
+    }
+    return 0;
   }
 
   submitAnswer() {
