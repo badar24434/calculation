@@ -25,6 +25,7 @@
   <div class="container">
     <header>
       <h1>🧮 Mental Calculation Practice</h1>
+      <p class="author">made by roti john</p>
     </header>
 
     <main>
@@ -54,10 +55,23 @@
           </select>
         </div>
 
+        <div class="form-group">
+          <label for="questionCount">Number of Questions:</label>
+          <input type="number" id="questionCount" value="10" min="1" max="50">
+        </div>
+
         <button id="startBtn" class="btn-primary">Start Practice</button>
       </section>
 
       <section class="game" id="game" style="display: none;">
+        <div class="progress-bar">
+          <div class="progress-text">
+            <span>Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span></span>
+            <span>Score: <span id="currentScore">0</span></span>
+          </div>
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+
         <div class="countdown" id="countdown" style="display: none;">
           <div class="countdown-number" id="countdownNumber">3</div>
           <div class="countdown-quote" id="countdownQuote">Get ready to challenge your mind!</div>
@@ -80,6 +94,25 @@
 
         <button id="nextBtn" class="btn-secondary" style="display: none;">Next Question</button>
         <button id="backBtn" class="btn-secondary">Back to Setup</button>
+      </section>
+
+      <section class="results" id="results" style="display: none;">
+        <h2>🎉 Practice Complete!</h2>
+        <div class="final-score">
+          <div class="score-circle">
+            <span id="finalScore">8</span>
+            <span>/</span>
+            <span id="finalTotal">10</span>
+          </div>
+          <div class="score-percentage" id="scorePercentage">80%</div>
+        </div>
+        <div class="score-details">
+          <p>Correct Answers: <span id="correctCount">8</span></p>
+          <p>Wrong Answers: <span id="wrongCount">2</span></p>
+          <p>Average Time: <span id="averageTime">3.2s</span></p>
+        </div>
+        <div class="performance-message" id="performanceMessage">Great job! Keep practicing!</div>
+        <button id="restartBtn" class="btn-primary">Practice Again</button>
       </section>
     </main>
   </div>

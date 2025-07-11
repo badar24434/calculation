@@ -6,6 +6,13 @@ class CalculationGame {
     this.correctAnswer = null;
     this.countdownActive = false;
     
+    // New scoring properties
+    this.totalQuestions = 10;
+    this.currentQuestionNumber = 0;
+    this.correctAnswers = 0;
+    this.wrongAnswers = 0;
+    this.allTimes = [];
+    
     this.motivationalQuotes = [
       "Numbers are the music of reason!",
       "Every calculation makes you stronger!",
@@ -30,11 +37,17 @@ class CalculationGame {
     this.min2Input = document.getElementById('min2');
     this.max2Input = document.getElementById('max2');
     this.operationSelect = document.getElementById('operation');
+    this.questionCountInput = document.getElementById('questionCount');
     this.startBtn = document.getElementById('startBtn');
     
     // Game elements
     this.settingsSection = document.getElementById('settings');
     this.gameSection = document.getElementById('game');
+    this.resultsSection = document.getElementById('results');
+    this.currentQuestionSpan = document.getElementById('currentQuestion');
+    this.totalQuestionsSpan = document.getElementById('totalQuestions');
+    this.currentScoreSpan = document.getElementById('currentScore');
+    this.progressFill = document.getElementById('progressFill');
     this.countdownSection = document.getElementById('countdown');
     this.countdownNumber = document.getElementById('countdownNumber');
     this.countdownQuote = document.getElementById('countdownQuote');
@@ -45,13 +58,24 @@ class CalculationGame {
     this.feedback = document.getElementById('feedback');
     this.nextBtn = document.getElementById('nextBtn');
     this.backBtn = document.getElementById('backBtn');
+    
+    // Results elements
+    this.finalScore = document.getElementById('finalScore');
+    this.finalTotal = document.getElementById('finalTotal');
+    this.scorePercentage = document.getElementById('scorePercentage');
+    this.correctCount = document.getElementById('correctCount');
+    this.wrongCount = document.getElementById('wrongCount');
+    this.averageTime = document.getElementById('averageTime');
+    this.performanceMessage = document.getElementById('performanceMessage');
+    this.restartBtn = document.getElementById('restartBtn');
   }
 
   bindEvents() {
     this.startBtn.addEventListener('click', () => this.startGame());
     this.submitBtn.addEventListener('click', () => this.submitAnswer());
-    this.nextBtn.addEventListener('click', () => this.generateQuestion());
+    this.nextBtn.addEventListener('click', () => this.nextQuestion());
     this.backBtn.addEventListener('click', () => this.backToSettings());
+    this.restartBtn.addEventListener('click', () => this.backToSettings());
     
     this.answerInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
@@ -63,8 +87,21 @@ class CalculationGame {
   startGame() {
     if (!this.validateInputs()) return;
     
+    // Initialize game state
+    this.totalQuestions = parseInt(this.questionCountInput.value);
+    this.currentQuestionNumber = 0;
+    this.correctAnswers = 0;
+    this.wrongAnswers = 0;
+    this.allTimes = [];
+    
+    // Update UI
+    this.totalQuestionsSpan.textContent = this.totalQuestions;
+    this.currentScoreSpan.textContent = '0';
+    this.updateProgress();
+    
     this.settingsSection.style.display = 'none';
     this.gameSection.style.display = 'block';
+    this.resultsSection.style.display = 'none';
     this.generateQuestion();
   }
 
@@ -73,6 +110,7 @@ class CalculationGame {
     const max1 = parseInt(this.max1Input.value);
     const min2 = parseInt(this.min2Input.value);
     const max2 = parseInt(this.max2Input.value);
+    const questionCount = parseInt(this.questionCountInput.value);
 
     if (min1 > max1 || min2 > max2) {
       alert('Minimum values cannot be greater than maximum values!');
@@ -84,7 +122,30 @@ class CalculationGame {
       return false;
     }
 
+    if (questionCount < 1 || questionCount > 50) {
+      alert('Number of questions must be between 1 and 50!');
+      return false;
+    }
+
     return true;
+  }
+
+  updateProgress() {
+    const progressPercent = (this.currentQuestionNumber / this.totalQuestions) * 100;
+    this.progressFill.style.width = `${progressPercent}%`;
+    this.currentQuestionSpan.textContent = this.currentQuestionNumber + 1;
+    this.currentScoreSpan.textContent = this.correctAnswers;
+  }
+
+  nextQuestion() {
+    this.currentQuestionNumber++;
+    
+    if (this.currentQuestionNumber >= this.totalQuestions) {
+      this.showResults();
+    } else {
+      this.updateProgress();
+      this.generateQuestion();
+    }
   }
 
   generateQuestion() {
@@ -230,7 +291,16 @@ class CalculationGame {
       return;
     }
 
+    this.allTimes.push(timeTaken);
     const isCorrect = this.checkAnswer(userAnswer);
+    
+    if (isCorrect) {
+      this.correctAnswers++;
+    } else {
+      this.wrongAnswers++;
+    }
+    
+    this.updateProgress();
     this.showFeedback(isCorrect, timeTaken);
     
     this.submitBtn.style.display = 'none';
@@ -265,6 +335,38 @@ class CalculationGame {
     this.feedback.innerHTML = '';
   }
 
+  showResults() {
+    this.gameSection.style.display = 'none';
+    this.resultsSection.style.display = 'block';
+    
+    const percentage = Math.round((this.correctAnswers / this.totalQuestions) * 100);
+    const averageTime = this.allTimes.length > 0 ? 
+      (this.allTimes.reduce((a, b) => a + b, 0) / this.allTimes.length).toFixed(1) : '0.0';
+    
+    this.finalScore.textContent = this.correctAnswers;
+    this.finalTotal.textContent = this.totalQuestions;
+    this.scorePercentage.textContent = `${percentage}%`;
+    this.correctCount.textContent = this.correctAnswers;
+    this.wrongCount.textContent = this.wrongAnswers;
+    this.averageTime.textContent = `${averageTime}s`;
+    
+    // Performance message
+    let message = '';
+    if (percentage >= 90) {
+      message = '🌟 Outstanding! You\'re a math wizard!';
+    } else if (percentage >= 80) {
+      message = '🎉 Excellent work! Keep it up!';
+    } else if (percentage >= 70) {
+      message = '👍 Good job! You\'re improving!';
+    } else if (percentage >= 50) {
+      message = '💪 Not bad! Practice makes perfect!';
+    } else {
+      message = '📚 Keep practicing! You\'ll get better!';
+    }
+    
+    this.performanceMessage.textContent = message;
+  }
+
   backToSettings() {
     this.stopTimer();
     this.countdownActive = false;
@@ -272,8 +374,15 @@ class CalculationGame {
     this.questionDisplay.parentElement.style.display = 'block';
     this.settingsSection.style.display = 'block';
     this.gameSection.style.display = 'none';
+    this.resultsSection.style.display = 'none';
     this.currentQuestion = null;
     this.timerDisplay.textContent = '0.0s';
+    
+    // Reset game state
+    this.currentQuestionNumber = 0;
+    this.correctAnswers = 0;
+    this.wrongAnswers = 0;
+    this.allTimes = [];
   }
 }
 

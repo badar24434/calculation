@@ -114,6 +114,14 @@ header h1 {
   text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
+.author {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  margin-top: 5px;
+  font-style: italic;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
 .settings, .game {
   background: white;
   border-radius: 15px;
@@ -121,10 +129,92 @@ header h1 {
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
-.settings h2, .game h2 {
-  margin-bottom: 20px;
-  color: #333;
+.results {
+  background: white;
+  border-radius: 15px;
+  padding: 40px 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   text-align: center;
+}
+
+.progress-bar {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 2px solid #e9ecef;
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.progress-fill {
+  height: 8px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+.final-score {
+  margin: 30px 0;
+}
+
+.score-circle {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.score-percentage {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #667eea;
+  margin-bottom: 20px;
+}
+
+.score-details {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.score-details p {
+  margin: 10px 0;
+  font-size: 1.1rem;
+  color: #495057;
+}
+
+.score-details span {
+  font-weight: bold;
+  color: #667eea;
+}
+
+.performance-message {
+  font-size: 1.3rem;
+  color: #28a745;
+  font-weight: 600;
+  margin: 20px 0;
+  padding: 15px;
+  background: #d4edda;
+  border-radius: 8px;
+  border: 1px solid #c3e6cb;
 }
 
 .form-group {
