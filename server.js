@@ -87,23 +87,6 @@ app.get('/api/stats', (req, res) => {
   });
 });
 
-// API endpoint to update user activity (heartbeat)
-app.post('/api/heartbeat', (req, res) => {
-  const sessionId = req.headers['x-session-id'];
-  
-  if (sessionId) {
-    const stats = readStats();
-    if (stats.activeUsers[sessionId]) {
-      stats.activeUsers[sessionId].lastSeen = Date.now();
-      // Don't mark as new anymore after first heartbeat
-      stats.activeUsers[sessionId].isNew = false;
-      writeStats(stats);
-    }
-  }
-  
-  res.json({ success: true });
-});
-
 // Helper functions for comments
 function readComments() {
   try {
@@ -191,6 +174,23 @@ app.use(express.static('.'));
 
 // Serve index.html for the root route
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Serve comments page
+app.get('/comments', (req, res) => {
+  res.sendFile(path.join(__dirname, 'comments.html'));
+});
+
+// Handle all other routes by serving index.html (for SPA behavior)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.listen(PORT, () => {
+  console.log(`Mental Calculation Practice app running on port ${PORT}`);
+  console.log('Visitor tracking enabled');
+});
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 

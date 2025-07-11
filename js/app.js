@@ -37,7 +37,12 @@ class CalculationGame {
     this.max1Input = document.getElementById('max1');
     this.min2Input = document.getElementById('min2');
     this.max2Input = document.getElementById('max2');
-    this.operationSelect = document.getElementById('operation');
+    this.operationCheckboxes = {
+      addition: document.getElementById('additionOp'),
+      subtraction: document.getElementById('subtractionOp'),
+      multiplication: document.getElementById('multiplicationOp'),
+      division: document.getElementById('divisionOp')
+    };
     this.questionCountInput = document.getElementById('questionCount');
     this.startBtn = document.getElementById('startBtn');
     
@@ -135,7 +140,24 @@ class CalculationGame {
       return false;
     }
 
+    // Check if at least one operation is selected
+    const selectedOperations = this.getSelectedOperations();
+    if (selectedOperations.length === 0) {
+      alert('Please select at least one operation!');
+      return false;
+    }
+
     return true;
+  }
+
+  getSelectedOperations() {
+    const operations = [];
+    Object.values(this.operationCheckboxes).forEach(checkbox => {
+      if (checkbox.checked) {
+        operations.push(checkbox.value);
+      }
+    });
+    return operations;
   }
 
   updateProgress() {
@@ -200,7 +222,10 @@ class CalculationGame {
     const max1 = parseInt(this.max1Input.value);
     const min2 = parseInt(this.min2Input.value);
     const max2 = parseInt(this.max2Input.value);
-    const operation = this.operationSelect.value;
+    
+    // Get selected operations and pick one randomly
+    const selectedOperations = this.getSelectedOperations();
+    const operation = selectedOperations[Math.floor(Math.random() * selectedOperations.length)];
 
     let num1 = this.getRandomNumber(min1, max1);
     let num2 = this.getRandomNumber(min2, max2);

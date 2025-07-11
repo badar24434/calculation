@@ -495,6 +495,58 @@ header h1 {
   font-weight: 600;
 }
 
+.operation-checkboxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 500;
+  color: #555;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.checkbox-label:hover {
+  background-color: #f8f9fa;
+}
+
+.checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e1e5e9;
+  border-radius: 4px;
+  margin-right: 10px;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+  background-color: #667eea;
+  border-color: #667eea;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
 @media (max-width: 480px) {
   .container {
     padding: 10px;
@@ -523,6 +575,10 @@ header h1 {
   
   .answer-details {
     font-size: 0.85rem;
+  }
+  
+  .operation-checkboxes {
+    grid-template-columns: 1fr;
   }
 }
 
