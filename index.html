@@ -1,0 +1,90 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mental Calculation Practice</title>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="Practice mental math calculations with customizable difficulty">
+
+  <meta property="og:title" content="Mental Calculation Practice">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>🧮 Mental Calculation Practice</h1>
+    </header>
+
+    <main>
+      <section class="settings" id="settings">
+        <h2>Setup</h2>
+        <div class="form-group">
+          <label for="min1">First Number Range:</label>
+          <input type="number" id="min1" value="10" min="1" max="100">
+          <span>to</span>
+          <input type="number" id="max1" value="50" min="1" max="100">
+        </div>
+
+        <div class="form-group">
+          <label for="min2">Second Number Range:</label>
+          <input type="number" id="min2" value="1" min="1" max="100">
+          <span>to</span>
+          <input type="number" id="max2" value="10" min="1" max="100">
+        </div>
+
+        <div class="form-group">
+          <label for="operation">Operation:</label>
+          <select id="operation">
+            <option value="+">Addition (+)</option>
+            <option value="-">Subtraction (−)</option>
+            <option value="*">Multiplication (×)</option>
+            <option value="/">Division (÷)</option>
+          </select>
+        </div>
+
+        <button id="startBtn" class="btn-primary">Start Practice</button>
+      </section>
+
+      <section class="game" id="game" style="display: none;">
+        <div class="countdown" id="countdown" style="display: none;">
+          <div class="countdown-number" id="countdownNumber">3</div>
+          <div class="countdown-quote" id="countdownQuote">Get ready to challenge your mind!</div>
+        </div>
+
+        <div class="question-display">
+          <h2 id="question">Ready?</h2>
+          <div class="timer">
+            <span>Time: </span>
+            <span id="timer">0.0s</span>
+          </div>
+        </div>
+
+        <div class="answer-section">
+          <input type="number" id="answerInput" placeholder="Your answer" step="0.1">
+          <button id="submitBtn" class="btn-primary">Submit</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <button id="nextBtn" class="btn-secondary" style="display: none;">Next Question</button>
+        <button id="backBtn" class="btn-secondary">Back to Setup</button>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+
+</html>
