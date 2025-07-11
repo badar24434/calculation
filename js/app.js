@@ -79,7 +79,12 @@ class CalculationGame {
     
     this.answerInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
-        this.submitAnswer();
+        // Check if next button is visible, if so go to next question
+        if (this.nextBtn.style.display === 'inline-block') {
+          this.nextQuestion();
+        } else {
+          this.submitAnswer();
+        }
       }
     });
   }
