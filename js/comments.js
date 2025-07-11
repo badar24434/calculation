@@ -107,7 +107,7 @@ class CommentsManager {
       this.commentsContainer.innerHTML = `
         <div class="no-comments">
           <h3>No comments yet</h3>
-          <p>Be the first to share your thoughts!</p>
+          <p>Wehh please comment!</p>
         </div>
       `;
       return;
