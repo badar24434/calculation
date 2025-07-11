@@ -1,7 +1,6 @@
 class VisitorTracker {
   constructor() {
     this.sessionId = null;
-    this.heartbeatInterval = null;
     this.init();
   }
 
@@ -13,43 +12,44 @@ class VisitorTracker {
     // Load initial stats
     await this.updateStats();
 
-    // Start heartbeat to keep user as active
-    this.startHeartbeat();
-
-    // Update stats every 15 seconds for more responsive live count
-    setInterval(() => this.updateStats(), 15000);
-
-    // Send heartbeat when user becomes active
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        this.sendHeartbeat();
-      }
-    });
-
-    // Send heartbeat when user interacts with page
-    ['click', 'keypress', 'mousemove', 'scroll'].forEach(event => {
-      document.addEventListener(event, this.throttle(() => {
-        this.sendHeartbeat();
-      }, 30000)); // Throttle to once per 30 seconds
-    });
+    // Update stats every 30 seconds
+    setInterval(() => this.updateStats(), 30000);
   }
 
-  throttle(func, delay) {
-    let timeoutId;
-    let lastExecTime = 0;
-    return function (...args) {
-      const currentTime = Date.now();
+  generateSessionId() {
+    return Math.random().toString(36).substring(2) + Date.now().toString(36);
+  }
+
+  async updateStats() {
+    try {
+      const response = await fetch('/api/stats', {
+        headers: {
+          'X-Session-ID': this.sessionId
+        }
+      });
       
-      if (currentTime - lastExecTime > delay) {
-        func.apply(this, args);
-        lastExecTime = currentTime;
-      } else {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          func.apply(this, args);
-          lastExecTime = Date.now();
-        }, delay - (currentTime - lastExecTime));
+      if (response.ok) {
+        const stats = await response.json();
+        this.displayStats(stats);
       }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  }
+
+  displayStats(stats) {
+    const totalVisitsEl = document.getElementById('totalVisits');
+
+    if (totalVisitsEl) {
+      totalVisitsEl.textContent = stats.totalVisits.toLocaleString();
+    }
+  }
+}
+
+// Initialize visitor tracking when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  new VisitorTracker();
+});
     };
   }
 

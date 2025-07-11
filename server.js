@@ -13,7 +13,6 @@ const COMMENTS_FILE = path.join(__dirname, 'comments.json');
 if (!fs.existsSync(STATS_FILE)) {
   const initialStats = {
     totalVisits: 0,
-    activeUsers: {},
     lastUpdated: new Date().toISOString()
   };
   fs.writeFileSync(STATS_FILE, JSON.stringify(initialStats, null, 2));
@@ -35,7 +34,7 @@ function readStats() {
     return JSON.parse(data);
   } catch (error) {
     console.error('Error reading stats:', error);
-    return { totalVisits: 0, activeUsers: {}, lastUpdated: new Date().toISOString() };
+    return { totalVisits: 0, lastUpdated: new Date().toISOString() };
   }
 }
 
@@ -47,23 +46,6 @@ function writeStats(stats) {
     console.error('Error writing stats:', error);
   }
 }
-
-function cleanupInactiveUsers() {
-  const stats = readStats();
-  const now = Date.now();
-  const TIMEOUT = 5 * 60 * 1000; // 5 minutes timeout
-  
-  Object.keys(stats.activeUsers).forEach(sessionId => {
-    if (now - stats.activeUsers[sessionId].lastSeen > TIMEOUT) {
-      delete stats.activeUsers[sessionId];
-    }
-  });
-  
-  writeStats(stats);
-}
-
-// Cleanup inactive users every minute
-setInterval(cleanupInactiveUsers, 60000);
 
 // Generate simple session ID
 function generateSessionId() {
@@ -80,23 +62,14 @@ app.use((req, res, next) => {
     const stats = readStats();
     const sessionId = req.headers['x-session-id'] || generateSessionId();
     
-    // Check if this is a completely new session (never seen before)
-    const isNewVisitor = !stats.activeUsers[sessionId];
+    // Check if this is a new session
+    const hasVisited = req.headers['x-session-id'];
     
-    // Only increment total visits for genuinely new visitors
-    if (isNewVisitor) {
+    // Only increment total visits for new sessions
+    if (!hasVisited) {
       stats.totalVisits++;
+      writeStats(stats);
     }
-    
-    // Always update/add active user (this tracks current viewers)
-    stats.activeUsers[sessionId] = {
-      lastSeen: Date.now(),
-      userAgent: req.get('User-Agent') || 'Unknown',
-      ip: req.ip || req.connection.remoteAddress || 'Unknown',
-      isNew: isNewVisitor
-    };
-    
-    writeStats(stats);
     
     // Set session ID in response header
     res.setHeader('X-Session-ID', sessionId);
@@ -107,11 +80,9 @@ app.use((req, res, next) => {
 // API endpoint to get visitor stats
 app.get('/api/stats', (req, res) => {
   const stats = readStats();
-  const activeUserCount = Object.keys(stats.activeUsers).length;
   
   res.json({
     totalVisits: stats.totalVisits,
-    currentlyViewing: activeUserCount,
     lastUpdated: stats.lastUpdated
   });
 });
@@ -208,6 +179,35 @@ app.post('/api/comments', (req, res) => {
     timestamp: new Date().toISOString(),
     ip: req.ip || req.connection.remoteAddress || 'Unknown'
   };
+  
+  commentsData.comments.push(newComment);
+  writeComments(commentsData);
+  
+  res.json({ success: true, comment: newComment });
+});
+
+// Serve static files from the root directory
+app.use(express.static('.'));
+
+// Serve index.html for the root route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Serve comments page
+app.get('/comments', (req, res) => {
+  res.sendFile(path.join(__dirname, 'comments.html'));
+});
+
+// Handle all other routes by serving index.html (for SPA behavior)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.listen(PORT, () => {
+  console.log(`Mental Calculation Practice app running on port ${PORT}`);
+  console.log('Visitor tracking enabled');
+});
   
   commentsData.comments.push(newComment);
   writeComments(commentsData);
