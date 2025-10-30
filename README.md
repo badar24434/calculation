@@ -345,23 +345,6 @@ heroku open
 vercel
 ```
 
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Contribution Guidelines
-
-- Follow existing code style
-- Write descriptive commit messages
-- Update documentation as needed
-- Test your changes thoroughly
-- Add comments for complex logic
 
 ## 🐛 Known Issues
 
@@ -390,10 +373,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-**Roti John**
+**Roti John (aka Badar)**
 
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
+- GitHub: [@yourusername](https://github.com/badar24434)
 
 ## 🙏 Acknowledgments
 
@@ -402,21 +384,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Community feedback and suggestions
 - HTML5 Boilerplate for base template
 
-## 📞 Support
-
-For support, please:
-- Open an issue on GitHub
-- Leave a comment in the application
-- Email: your.email@example.com
-
-## 📊 Version History
-
-- **0.0.1** (Current)
-  - Initial release
-  - Core calculation practice functionality
-  - Visitor tracking
-  - Comments system
-  - Responsive design
 
 ---
 
