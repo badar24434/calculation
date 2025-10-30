@@ -65,7 +65,7 @@ A modern, interactive web application for practicing mental math skills with cus
 
 ## 🚀 Demo
 
-Visit the live application: [Your Deployment URL]
+Visit the live application: [https://calculation-six.vercel.app/]
 
 ## 📦 Installation
 
